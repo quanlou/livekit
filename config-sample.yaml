@@ -62,6 +62,8 @@ rtc:
   #     protocol: tls
   #     username: ""
   #     credential: ""
+  # # control the number of the shuffled (stun, turn) pairs as ICE Candidates that a client can use 
+  # shuffled_ice_size: 1
   # # allows LiveKit to monitor congestion when sending streams and automatically
   # # manage bandwidth utilization to avoid congestion/loss. Enabled by default
   # congestion_control:

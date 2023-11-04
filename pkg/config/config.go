@@ -24,6 +24,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/pion/webrtc/v3"
 	"github.com/pkg/errors"
+	"github.com/samber/lo"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
 
@@ -86,6 +87,8 @@ type RTCConfig struct {
 
 	TURNServers []TURNServer `yaml:"turn_servers,omitempty"`
 
+	ShuffledICESize int `yaml:"shuffled_ice_size,omitempty"`
+
 	StrictACKs bool `yaml:"strict_acks,omitempty"`
 
 	// Number of packets to buffer for NACK
@@ -110,6 +113,23 @@ type RTCConfig struct {
 
 	// max number of bytes to buffer for data channel. 0 means unlimited
 	DataChannelMaxBufferedAmount uint64 `yaml:"data_channel_max_buffered_amount,omitempty"`
+}
+
+// GetTURNServers take the random shuffled_ice_size
+func (r *RTCConfig) GetTURNServers() []TURNServer {
+	if r.ShuffledICESize == 0 || len(r.TURNServers) == 0 {
+		return r.TURNServers
+	}
+
+	return lo.Samples(r.TURNServers, r.ShuffledICESize)
+}
+
+func (r *RTCConfig) GetSTUNServers() []string {
+	if r.ShuffledICESize == 0 || len(r.STUNServers) == 0 {
+		return r.STUNServers
+	}
+
+	return lo.Samples(r.STUNServers, r.ShuffledICESize)
 }
 
 type TURNServer struct {

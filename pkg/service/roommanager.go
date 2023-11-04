@@ -821,7 +821,7 @@ func (r *RoomManager) iceServersForParticipant(apiKey string, participant types.
 
 	if len(rtcConf.TURNServers) > 0 {
 		hasSTUN = true
-		for _, s := range r.config.RTC.TURNServers {
+		for _, s := range r.config.RTC.GetTURNServers() {
 			scheme := "turn"
 			transport := "tcp"
 			if s.Protocol == "tls" {
@@ -842,7 +842,7 @@ func (r *RoomManager) iceServersForParticipant(apiKey string, participant types.
 
 	if len(rtcConf.STUNServers) > 0 {
 		hasSTUN = true
-		iceServers = append(iceServers, iceServerForStunServers(r.config.RTC.STUNServers))
+		iceServers = append(iceServers, iceServerForStunServers(r.config.RTC.GetSTUNServers()))
 	}
 
 	if !hasSTUN {
